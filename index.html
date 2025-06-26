@@ -46,14 +46,6 @@
       font-family: monospace;
     }
 
-    .entry-pass {
-      font-size: 24px;
-      font-weight: bold;
-      display: block;
-      text-align: center;
-      margin-bottom: 16px;
-    }
-
     button {
       display: block;
       width: calc(100% - 32px);
@@ -86,21 +78,13 @@
 
       #result {
         font-size: 20pt !important;
-        line-height: 2;
+        line-height: 2.2;
         box-shadow: none;
-        border: 2px solid black;
-        padding: 32px;
+        border: none;
+        padding: 0;
         margin: 0 auto;
         max-width: 100%;
         color: black;
-      }
-
-      .entry-pass {
-        font-size: 28pt !important;
-        font-weight: bold;
-        text-align: center;
-        display: block;
-        margin-bottom: 20px;
       }
     }
   </style>
@@ -127,15 +111,19 @@
       }
 
       const [reg, nama, paroki, kota, wa] = parts;
+      const regDisplay = reg.toUpperCase().padStart(Math.floor((20 + reg.length) / 2));
 
       const ticket = 
-`🎟️ ENTRY PASS
+`====================
+     REG# ${regDisplay}
+====================
+
+🎟️ ENTRY PASS
 
 Kebangunan Rohani Katolik
 PDPKK HKY Tasikmalaya
 Bersama Rm. Eko Wahyu, OSC.
 
-📌 No Registrasi : ${reg}
 👤 Nama          : ${nama}
 ⛪ Paroki/Lingk  : ${paroki}
 🏙️  Kota          : ${kota}
@@ -147,7 +135,6 @@ Bersama Rm. Eko Wahyu, OSC.
 
 Panitia KRK PDPKK @2025`;
 
-      // Tampilkan sebagai teks biasa (monospace), sudah rapi
       document.getElementById("result").innerText = ticket;
       lastTiket = ticket;
 
@@ -180,4 +167,21 @@ Panitia KRK PDPKK @2025`;
 
     window.onload = function () {
       if (typeof Html5Qrcode === "undefined") {
-        document.getElementById("re
+        document.getElementById("reader").innerText = "❌ Scanner tidak tersedia.";
+        return;
+      }
+
+      scanner = new Html5Qrcode("reader");
+
+      scanner.start(
+        { facingMode: "environment" },
+        { fps: 10, qrbox: 250 },
+        onScanSuccess
+      ).catch(err => {
+        console.error("❌ Kamera error:", err);
+        document.getElementById("reader").innerText = "❌ Tidak dapat mengakses kamera.";
+      });
+    };
+  </script>
+</body>
+</html>
