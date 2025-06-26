@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport"
+        content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>ENTRY PASS KRK</title>
+  <script src="https://unpkg.com/html5-qrcode" defer></script>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="scanner">
+    <h1>Scan Tiket Peserta</h1>
+    <div id="reader">Loading scanner...</div>
+  </div>
+
+  <div id="ticket" class="ticket hidden">
+    <div class="title">*ENTRY PASS*</div>
+    <div class="section">Kebangunan Rohani Katolik<br>PDPKK HKY Tasikmalaya<br>Bersama Rm.Eko Wahyu, OSC.</div>
+
+    <div class="line"></div>
+
+    <div class="field">No Registrasi : <span id="reg">-</span></div>
+    <div class="field">Nama : <span id="name">-</span></div>
+    <div class="field">Paroki/Lingk: <span id="paroki">-</span></div>
+    <div class="field">Kota : <span id="kota">-</span></div>
+    <div class="field">No WA : <span id="wa">-</span></div>
+
+    <div class="line dashed"></div>
+
+    <div class="section small">Mohon jaga ketertiban<br>Dilarang makan/minum di Gereja<br>Tiket ditukar bingkisan</div>
+
+    <div class="footer">Panitia KRK PDPKK @2025</div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>

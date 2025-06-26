@@ -1,0 +1,83 @@
+body {
+  font-family: 'Courier New', monospace;
+  background: #f7f7f7;
+  margin: 0;
+  padding: 20px;
+  text-align: center;
+}
+
+.scanner {
+  padding: 16px;
+}
+
+#reader {
+  max-width: 300px;
+  margin: 0 auto 16px;
+  border-radius: 10px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+}
+
+.ticket {
+  width: 58mm;
+  background: white;
+  padding: 12px 16px;
+  margin: 0 auto;
+  font-size: 14px;
+  border-radius: 4px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  text-align: left;
+}
+
+.title {
+  text-align: center;
+  font-weight: bold;
+  font-size: 16px;
+  margin-bottom: 6px;
+}
+
+.section {
+  text-align: center;
+  font-size: 13px;
+  margin-bottom: 8px;
+}
+
+.section.small {
+  font-size: 12px;
+  margin-top: 8px;
+}
+
+.field {
+  margin: 4px 0;
+}
+
+.line {
+  border-top: 1px solid black;
+  margin: 8px 0;
+}
+
+.dashed {
+  border-top: 1px dashed #aaa;
+}
+
+.footer {
+  text-align: center;
+  font-size: 12px;
+  margin-top: 8px;
+}
+
+.hidden {
+  display: none;
+}
+
+@media print {
+  .scanner,
+  #reader {
+    display: none;
+  }
+
+  .ticket {
+    width: 100%;
+    box-shadow: none;
+    margin: 0;
+  }
+}
