@@ -1,101 +1,53 @@
 body {
-  font-family: 'Courier New', monospace;
-  background: #f7f7f7;
-  margin: 0;
+  font-family: sans-serif;
+  background: #f2f2f2;
   padding: 20px;
   text-align: center;
 }
 
 h1 {
-  font-size: 16px;
-  margin-bottom: 12px;
-}
-
-.scanner {
-  padding: 16px;
+  font-size: 20px;
+  margin-bottom: 10px;
 }
 
 #reader {
-  max-width: 300px;
+  width: 100%;
+  max-width: 320px;
+  margin: 0 auto 10px;
+}
+
+.box {
+  background: white;
+  padding: 14px;
   margin: 12px auto;
-  border-radius: 10px;
-  box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+  max-width: 320px;
+  border-radius: 8px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+  font-size: 14px;
+  text-align: left;
+  white-space: pre-wrap;
 }
 
 button {
   background: #5e60ce;
   color: white;
-  padding: 10px 18px;
+  padding: 10px 20px;
   border: none;
-  border-radius: 6px;
-  font-size: 15px;
-  cursor: pointer;
-  box-shadow: 0 3px 8px rgba(0,0,0,0.15);
-}
-
-.ticket {
-  width: 58mm;
-  background: white;
-  padding: 12px 16px;
-  margin: 0 auto;
   font-size: 14px;
-  border-radius: 4px;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-  text-align: left;
-}
-
-.title {
-  text-align: center;
-  font-weight: bold;
-  font-size: 16px;
-  margin-bottom: 6px;
-}
-
-.section {
-  text-align: center;
-  font-size: 13px;
-  margin-bottom: 8px;
-}
-
-.section.small {
-  font-size: 12px;
-  margin-top: 8px;
-}
-
-.field {
-  margin: 4px 0;
-}
-
-.line {
-  border-top: 1px solid black;
-  margin: 8px 0;
-}
-
-.dashed {
-  border-top: 1px dashed #aaa;
-}
-
-.footer {
-  text-align: center;
-  font-size: 12px;
-  margin-top: 8px;
-}
-
-.hidden {
-  display: none;
+  border-radius: 6px;
+  cursor: pointer;
 }
 
 @media print {
-  .scanner,
-  #reader,
-  button {
-    display: none;
+  body, #reader, h1, button {
+    display: none !important;
   }
 
-  .ticket {
-    width: 100%;
+  #result {
+    display: block;
     box-shadow: none;
-    margin: 0;
-    padding: 8px;
+    border: none;
+    font-size: 16px;
+    padding: 0;
   }
 }
