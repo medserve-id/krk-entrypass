@@ -44,11 +44,11 @@ function onScanSuccess(decodedText) {
   if (typeof AndroidBridge !== "undefined" && AndroidBridge.print) {
     AndroidBridge.print(document.getElementById("ticket").innerHTML);
   } else {
-    alert("AndroidBridge tidak tersedia. Cetak manual atau periksa koneksi WebView.");
+    alert("AndroidBridge tidak tersedia. Cetak manual atau pastikan WebView Android aktif.");
   }
 }
 
 window.addEventListener("load", () => {
-  const scanBtn = document.querySelector("button");
+  const scanBtn = document.getElementById("scanBtn");
   if (scanBtn) scanBtn.disabled = false;
 });
