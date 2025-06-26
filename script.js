@@ -14,7 +14,6 @@ function startScanner() {
 }
 
 function onScanSuccess(decodedText) {
-  // Format QR yang di-scan: REG123|Nama Peserta|Paroki|Kota|WA
   const [reg, nama, paroki, kota, wa] = decodedText.split("|");
 
   document.getElementById("reg").textContent = reg || "-";
@@ -25,14 +24,12 @@ function onScanSuccess(decodedText) {
 
   document.getElementById("ticket").classList.remove("hidden");
 
-  // Stop kamera agar tidak scan terus-menerus
   if (scanner) {
     scanner.stop().then(() => {
       scanner.clear();
     }).catch((e) => console.warn("❌ Gagal menghentikan scanner:", e));
   }
 
-  // Kirim ke Android untuk cetak
   if (typeof AndroidBridge !== "undefined") {
     AndroidBridge.print(document.getElementById("ticket").innerHTML);
   }
