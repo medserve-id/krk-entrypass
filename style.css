@@ -6,15 +6,31 @@ body {
   text-align: center;
 }
 
+h1 {
+  font-size: 16px;
+  margin-bottom: 12px;
+}
+
 .scanner {
   padding: 16px;
 }
 
 #reader {
   max-width: 300px;
-  margin: 0 auto 16px;
+  margin: 12px auto;
   border-radius: 10px;
   box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+}
+
+button {
+  background: #5e60ce;
+  color: white;
+  padding: 10px 18px;
+  border: none;
+  border-radius: 6px;
+  font-size: 15px;
+  cursor: pointer;
+  box-shadow: 0 3px 8px rgba(0,0,0,0.15);
 }
 
 .ticket {
@@ -71,7 +87,8 @@ body {
 
 @media print {
   .scanner,
-  #reader {
+  #reader,
+  button {
     display: none;
   }
 
@@ -79,5 +96,6 @@ body {
     width: 100%;
     box-shadow: none;
     margin: 0;
+    padding: 8px;
   }
 }
