@@ -7,45 +7,51 @@
   <script src="https://unpkg.com/html5-qrcode"></script>
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;700&display=swap" rel="stylesheet">
   <style>
-    * {
-      box-sizing: border-box;
-    }
-
     body {
       margin: 0;
       font-family: 'DM Sans', sans-serif;
-      background: linear-gradient(to bottom right, #fcfcfc, #f0f4ff);
-      padding: 24px 16px 100px;
-      overflow-x: hidden;
+      background: linear-gradient(to bottom right, #f7f9ff, #e4eaff);
+      padding: 24px 16px 120px;
       text-align: center;
     }
 
     h1 {
-      font-size: 22px;
-      margin-bottom: 16px;
+      font-size: 24px;
+      margin-bottom: 20px;
       font-weight: 700;
-      color: #2c2c2c;
+      color: #333;
     }
 
     #reader {
       width: 100%;
       max-width: 320px;
-      margin: 0 auto 16px auto;
+      margin: 0 auto 20px;
       border-radius: 12px;
       box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
     }
 
     #result {
       background: white;
-      padding: 20px;
-      border-radius: 12px;
-      max-width: 340px;
-      margin: 0 auto 16px;
+      border: 2px dashed #5e60ce;
+      padding: 28px;
+      border-radius: 16px;
+      max-width: 360px;
+      margin: 0 auto 20px;
       box-shadow: 0 6px 20px rgba(0, 0, 0, 0.06);
-      white-space: pre-wrap;
-      font-size: 16px;
-      color: #333;
+      font-size: 18px;
+      color: #000;
+      white-space: pre;
       text-align: left;
+      line-height: 1.8;
+      font-family: monospace;
+    }
+
+    .entry-pass {
+      font-size: 24px;
+      font-weight: bold;
+      display: block;
+      text-align: center;
+      margin-bottom: 16px;
     }
 
     button {
@@ -55,12 +61,13 @@
       margin: 8px auto;
       background: #5e60ce;
       color: white;
-      padding: 14px;
-      font-size: 16px;
+      padding: 16px;
+      font-size: 18px;
       border: none;
-      border-radius: 8px;
+      border-radius: 10px;
       cursor: pointer;
       box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+      font-weight: bold;
     }
 
     button:hover {
@@ -78,13 +85,22 @@
       }
 
       #result {
-        font-size: 18pt !important;
+        font-size: 20pt !important;
+        line-height: 2;
         box-shadow: none;
-        border: none;
-        padding: 0;
+        border: 2px solid black;
+        padding: 32px;
         margin: 0 auto;
         max-width: 100%;
         color: black;
+      }
+
+      .entry-pass {
+        font-size: 28pt !important;
+        font-weight: bold;
+        text-align: center;
+        display: block;
+        margin-bottom: 20px;
       }
     }
   </style>
@@ -97,6 +113,7 @@
   <div id="result">📦 Arahkan kamera ke QR Code peserta</div>
 
   <button onclick="shareTiket()">🔗 Bagikan Tiket</button>
+  <button onclick="window.print()">🖨️ Cetak Tiket</button>
 
   <script>
     let scanner;
@@ -110,24 +127,27 @@
       }
 
       const [reg, nama, paroki, kota, wa] = parts;
+
       const ticket = 
-`ENTRY PASS 
+`🎟️ ENTRY PASS
+
 Kebangunan Rohani Katolik
 PDPKK HKY Tasikmalaya
-Bersama Rm.Eko Wahyu,OSC.
+Bersama Rm. Eko Wahyu, OSC.
 
-No Registrasi : ${reg}
-Nama          : ${nama}
-Paroki/Lingk  : ${paroki}
-Kota          : ${kota}
-No WA         : ${wa}
+📌 No Registrasi : ${reg}
+👤 Nama          : ${nama}
+⛪ Paroki/Lingk  : ${paroki}
+🏙️  Kota          : ${kota}
+📱 No WA         : ${wa}
 
-Mohon jaga ketertiban
-Dilarang makan/minum di Gereja
-Tiket ditukar bingkisan
+⚠️  Mohon jaga ketertiban
+🚫 Dilarang makan/minum di Gereja
+🎁 Tiket ditukar bingkisan
 
 Panitia KRK PDPKK @2025`;
 
+      // Tampilkan sebagai teks biasa (monospace), sudah rapi
       document.getElementById("result").innerText = ticket;
       lastTiket = ticket;
 
@@ -148,7 +168,7 @@ Panitia KRK PDPKK @2025`;
 
       if (navigator.share) {
         navigator.share({
-          title: 'ENTRY PASS KRK',
+          title: 'Tiket KRK',
           text: lastTiket
         }).catch((err) => console.warn("Gagal membagikan:", err));
       } else if (typeof AndroidBridge !== "undefined" && AndroidBridge.share) {
@@ -160,21 +180,4 @@ Panitia KRK PDPKK @2025`;
 
     window.onload = function () {
       if (typeof Html5Qrcode === "undefined") {
-        document.getElementById("reader").innerText = "❌ Scanner tidak tersedia.";
-        return;
-      }
-
-      scanner = new Html5Qrcode("reader");
-
-      scanner.start(
-        { facingMode: "environment" },
-        { fps: 10, qrbox: 250 },
-        onScanSuccess
-      ).catch(err => {
-        console.error("❌ Kamera error:", err);
-        document.getElementById("reader").innerText = "❌ Tidak dapat mengakses kamera.";
-      });
-    };
-  </script>
-</body>
-</html>
+        document.getElementById("re
