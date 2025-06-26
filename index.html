@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
   <title>Scan Tiket KRK</title>
-  <script src="https://unpkg.com/html5-qrcode" defer></script>
+  <script src="https://unpkg.com/html5-qrcode"></script>
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;700&display=swap" rel="stylesheet">
   <style>
     * {
@@ -15,7 +15,7 @@
       margin: 0;
       font-family: 'DM Sans', sans-serif;
       background: linear-gradient(to bottom right, #fcfcfc, #f0f4ff);
-      padding: 24px 16px 120px;
+      padding: 24px 16px 100px;
       overflow-x: hidden;
       text-align: center;
     }
@@ -23,4 +23,158 @@
     h1 {
       font-size: 22px;
       margin-bottom: 16px;
-      font-
+      font-weight: 700;
+      color: #2c2c2c;
+    }
+
+    #reader {
+      width: 100%;
+      max-width: 320px;
+      margin: 0 auto 16px auto;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    }
+
+    #result {
+      background: white;
+      padding: 20px;
+      border-radius: 12px;
+      max-width: 340px;
+      margin: 0 auto 16px;
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.06);
+      white-space: pre-wrap;
+      font-size: 16px;
+      color: #333;
+      text-align: left;
+    }
+
+    button {
+      display: block;
+      width: calc(100% - 32px);
+      max-width: 320px;
+      margin: 8px auto;
+      background: #5e60ce;
+      color: white;
+      padding: 14px;
+      font-size: 16px;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+    }
+
+    button:hover {
+      background: #4e4ecf;
+    }
+
+    @media print {
+      body {
+        background: white;
+        padding: 0;
+      }
+
+      #reader, button, h1 {
+        display: none !important;
+      }
+
+      #result {
+        font-size: 18pt !important;
+        box-shadow: none;
+        border: none;
+        padding: 0;
+        margin: 0 auto;
+        max-width: 100%;
+        color: black;
+      }
+    }
+  </style>
+</head>
+<body>
+  <h1>Scan Tiket Registrasi KRK</h1>
+
+  <div id="reader">📷 Memuat scanner...</div>
+
+  <div id="result">📦 Arahkan kamera ke QR Code peserta</div>
+
+  <button onclick="shareTiket()">🔗 Bagikan Tiket</button>
+
+  <script>
+    let scanner;
+    let lastTiket = "";
+
+    function onScanSuccess(decodedText) {
+      const parts = decodedText.split("|");
+      if (parts.length < 5) {
+        document.getElementById("result").innerText = "❌ Format QR tidak sesuai.";
+        return;
+      }
+
+      const [reg, nama, paroki, kota, wa] = parts;
+      const ticket = 
+`ENTRY PASS 
+Kebangunan Rohani Katolik
+PDPKK HKY Tasikmalaya
+Bersama Rm.Eko Wahyu,OSC.
+
+No Registrasi : ${reg}
+Nama          : ${nama}
+Paroki/Lingk  : ${paroki}
+Kota          : ${kota}
+No WA         : ${wa}
+
+Mohon jaga ketertiban
+Dilarang makan/minum di Gereja
+Tiket ditukar bingkisan
+
+Panitia KRK PDPKK @2025`;
+
+      document.getElementById("result").innerText = ticket;
+      lastTiket = ticket;
+
+      if (typeof AndroidBridge !== "undefined" && AndroidBridge.print) {
+        AndroidBridge.print(ticket);
+      }
+
+      if (scanner) {
+        scanner.stop().then(() => scanner.clear()).catch(() => {});
+      }
+    }
+
+    function shareTiket() {
+      if (!lastTiket) {
+        alert("Belum ada data untuk dibagikan.");
+        return;
+      }
+
+      if (navigator.share) {
+        navigator.share({
+          title: 'ENTRY PASS KRK',
+          text: lastTiket
+        }).catch((err) => console.warn("Gagal membagikan:", err));
+      } else if (typeof AndroidBridge !== "undefined" && AndroidBridge.share) {
+        AndroidBridge.share(lastTiket);
+      } else {
+        alert("Fitur berbagi tidak tersedia di perangkat ini.");
+      }
+    }
+
+    window.onload = function () {
+      if (typeof Html5Qrcode === "undefined") {
+        document.getElementById("reader").innerText = "❌ Scanner tidak tersedia.";
+        return;
+      }
+
+      scanner = new Html5Qrcode("reader");
+
+      scanner.start(
+        { facingMode: "environment" },
+        { fps: 10, qrbox: 250 },
+        onScanSuccess
+      ).catch(err => {
+        console.error("❌ Kamera error:", err);
+        document.getElementById("reader").innerText = "❌ Tidak dapat mengakses kamera.";
+      });
+    };
+  </script>
+</body>
+</html>
