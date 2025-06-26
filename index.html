@@ -9,7 +9,7 @@
   <style>
     body {
       margin: 0;
-      font-family: 'DM Sans', sans-serif;
+      font-family: 'DM Sans', monospace;
       background: linear-gradient(to bottom right, #f7f9ff, #e4eaff);
       padding: 24px 16px 120px;
       text-align: center;
@@ -104,42 +104,28 @@
     let lastTiket = "";
 
     function onScanSuccess(decodedText) {
-      const parts = decodedText.split("|");
-      if (parts.length < 5) {
-        document.getElementById("result").innerText = "❌ Format QR tidak sesuai.";
-        return;
+      const lines = decodedText.split('\n');
+      let regLine = lines.find(l => l.toLowerCase().includes('no registrasi'));
+      let regNumber = '';
+
+      if (regLine) {
+        regNumber = regLine.split(':')[1]?.trim() || '';
+        // Hapus baris "No Registrasi" dari isi
+        lines.splice(lines.indexOf(regLine), 1);
       }
 
-      const [reg, nama, paroki, kota, wa] = parts;
-      const regDisplay = reg.toUpperCase().padStart(Math.floor((20 + reg.length) / 2));
-
-      const ticket = 
+      const regDisplay =
 `====================
-     REG# ${regDisplay}
-====================
+      ${regNumber.toUpperCase()}
+====================`;
 
-🎟️ ENTRY PASS
+      const finalText = `${regDisplay}\n\n${lines.join('\n')}`;
 
-Kebangunan Rohani Katolik
-PDPKK HKY Tasikmalaya
-Bersama Rm. Eko Wahyu, OSC.
-
-👤 Nama          : ${nama}
-⛪ Paroki/Lingk  : ${paroki}
-🏙️  Kota          : ${kota}
-📱 No WA         : ${wa}
-
-⚠️  Mohon jaga ketertiban
-🚫 Dilarang makan/minum di Gereja
-🎁 Tiket ditukar bingkisan
-
-Panitia KRK PDPKK @2025`;
-
-      document.getElementById("result").innerText = ticket;
-      lastTiket = ticket;
+      document.getElementById("result").innerText = finalText;
+      lastTiket = finalText;
 
       if (typeof AndroidBridge !== "undefined" && AndroidBridge.print) {
-        AndroidBridge.print(ticket);
+        AndroidBridge.print(finalText);
       }
 
       if (scanner) {
