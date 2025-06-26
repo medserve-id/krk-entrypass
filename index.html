@@ -15,7 +15,7 @@
       margin: 0;
       font-family: 'DM Sans', sans-serif;
       background: linear-gradient(to bottom right, #fcfcfc, #f0f4ff);
-      padding: 24px 16px 80px;
+      padding: 24px 16px 100px;
       overflow-x: hidden;
       text-align: center;
     }
@@ -93,10 +93,11 @@
 
   <div id="result">📦 Arahkan kamera ke QR Code peserta</div>
 
-  <button onclick="window.print()">🖨️ Cetak Tiket</button>
+  <button onclick="shareTiket()">🔗 Bagikan Tiket</button>
 
   <script>
     let scanner;
+    let lastTiket = "";
 
     function onScanSuccess(decodedText) {
       const parts = decodedText.split("|");
@@ -108,14 +109,35 @@
       const [reg, nama, paroki, kota, wa] = parts;
       const ticket = `*ENTRY PASS KRK*\nNo Reg: ${reg}\nNama: ${nama}\nParoki: ${paroki}\nKota: ${kota}\nWA: ${wa}`;
       document.getElementById("result").innerText = ticket;
+      lastTiket = ticket;
 
       if (typeof AndroidBridge !== "undefined") {
-        AndroidBridge.print(ticket);
+        if (AndroidBridge.print) {
+          AndroidBridge.print(ticket); // opsional: tetap gunakan jika tersedia
+        }
       }
 
-      // Stop scanner sementara untuk hindari dobel scan
+      // Stop scanner setelah scan sukses
       if (scanner) {
         scanner.stop().then(() => scanner.clear()).catch(() => {});
+      }
+    }
+
+    function shareTiket() {
+      if (!lastTiket) {
+        alert("Belum ada data untuk dibagikan.");
+        return;
+      }
+
+      if (navigator.share) {
+        navigator.share({
+          title: 'ENTRY PASS KRK',
+          text: lastTiket
+        }).catch((err) => console.warn("Gagal membagikan:", err));
+      } else if (typeof AndroidBridge !== "undefined" && AndroidBridge.share) {
+        AndroidBridge.share(lastTiket);
+      } else {
+        alert("Fitur berbagi tidak tersedia di perangkat ini.");
       }
     }
 
