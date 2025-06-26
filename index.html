@@ -40,10 +40,12 @@
       box-shadow: 0 6px 20px rgba(0, 0, 0, 0.06);
       font-size: 18px;
       color: #000;
-      white-space: pre;
+      font-family: monospace;
+      white-space: pre-wrap;
+      word-break: break-word;
+      overflow-wrap: break-word;
       text-align: left;
       line-height: 1.8;
-      font-family: monospace;
     }
 
     button {
@@ -53,121 +55,4 @@
       margin: 8px auto;
       background: #5e60ce;
       color: white;
-      padding: 16px;
-      font-size: 18px;
-      border: none;
-      border-radius: 10px;
-      cursor: pointer;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.2);
-      font-weight: bold;
-    }
-
-    button:hover {
-      background: #4e4ecf;
-    }
-
-    @media print {
-      body {
-        background: white;
-        padding: 0;
-      }
-
-      #reader, button, h1 {
-        display: none !important;
-      }
-
-      #result {
-        font-size: 20pt !important;
-        line-height: 2.2;
-        box-shadow: none;
-        border: none;
-        padding: 0;
-        margin: 0 auto;
-        max-width: 100%;
-        color: black;
-      }
-    }
-  </style>
-</head>
-<body>
-  <h1>Scan Tiket Registrasi KRK</h1>
-
-  <div id="reader">📷 Memuat scanner...</div>
-
-  <div id="result">📦 Arahkan kamera ke QR Code peserta</div>
-
-  <button onclick="shareTiket()">🔗 Bagikan Tiket</button>
-  <button onclick="window.print()">🖨️ Cetak Tiket</button>
-
-  <script>
-    let scanner;
-    let lastTiket = "";
-
-    function onScanSuccess(decodedText) {
-      const lines = decodedText.split('\n');
-      let regLine = lines.find(l => l.toLowerCase().includes('no registrasi'));
-      let regNumber = '';
-
-      if (regLine) {
-        regNumber = regLine.split(':')[1]?.trim() || '';
-        // Hapus baris "No Registrasi" dari isi
-        lines.splice(lines.indexOf(regLine), 1);
-      }
-
-      const regDisplay =
-`====================
-      ${regNumber.toUpperCase()}
-====================`;
-
-      const finalText = `${regDisplay}\n\n${lines.join('\n')}`;
-
-      document.getElementById("result").innerText = finalText;
-      lastTiket = finalText;
-
-      if (typeof AndroidBridge !== "undefined" && AndroidBridge.print) {
-        AndroidBridge.print(finalText);
-      }
-
-      if (scanner) {
-        scanner.stop().then(() => scanner.clear()).catch(() => {});
-      }
-    }
-
-    function shareTiket() {
-      if (!lastTiket) {
-        alert("Belum ada data untuk dibagikan.");
-        return;
-      }
-
-      if (navigator.share) {
-        navigator.share({
-          title: 'Tiket KRK',
-          text: lastTiket
-        }).catch((err) => console.warn("Gagal membagikan:", err));
-      } else if (typeof AndroidBridge !== "undefined" && AndroidBridge.share) {
-        AndroidBridge.share(lastTiket);
-      } else {
-        alert("Fitur berbagi tidak tersedia di perangkat ini.");
-      }
-    }
-
-    window.onload = function () {
-      if (typeof Html5Qrcode === "undefined") {
-        document.getElementById("reader").innerText = "❌ Scanner tidak tersedia.";
-        return;
-      }
-
-      scanner = new Html5Qrcode("reader");
-
-      scanner.start(
-        { facingMode: "environment" },
-        { fps: 10, qrbox: 250 },
-        onScanSuccess
-      ).catch(err => {
-        console.error("❌ Kamera error:", err);
-        document.getElementById("reader").innerText = "❌ Tidak dapat mengakses kamera.";
-      });
-    };
-  </script>
-</body>
-</html>
+      padding: 1
