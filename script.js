@@ -1,6 +1,11 @@
 let scanner = null;
 
 function startScanner() {
+  if (typeof Html5Qrcode === "undefined") {
+    alert("Scanner belum siap. Coba refresh halaman atau tunggu sebentar.");
+    return;
+  }
+
   scanner = new Html5Qrcode("reader");
 
   scanner.start(
@@ -14,7 +19,13 @@ function startScanner() {
 }
 
 function onScanSuccess(decodedText) {
-  const [reg, nama, paroki, kota, wa] = decodedText.split("|");
+  const data = decodedText.split("|");
+  if (data.length < 5) {
+    alert("QR tidak valid atau format tidak sesuai.");
+    return;
+  }
+
+  const [reg, nama, paroki, kota, wa] = data;
 
   document.getElementById("reg").textContent = reg || "-";
   document.getElementById("name").textContent = nama || "-";
@@ -30,7 +41,14 @@ function onScanSuccess(decodedText) {
     }).catch((e) => console.warn("❌ Gagal menghentikan scanner:", e));
   }
 
-  if (typeof AndroidBridge !== "undefined") {
+  if (typeof AndroidBridge !== "undefined" && AndroidBridge.print) {
     AndroidBridge.print(document.getElementById("ticket").innerHTML);
+  } else {
+    alert("AndroidBridge tidak tersedia. Cetak manual atau periksa koneksi WebView.");
   }
 }
+
+window.addEventListener("load", () => {
+  const scanBtn = document.querySelector("button");
+  if (scanBtn) scanBtn.disabled = false;
+});
