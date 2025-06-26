@@ -116,12 +116,11 @@
         lines.splice(lines.indexOf(regLine), 1);
       }
 
-      // Format kolom agar titik dua mendekat ke label (pad end 13)
+      // Format kolom agar titik dua langsung setelah label + 1 spasi
       const formatKolom = (line) => {
         const [label, value] = line.split(':');
         if (!value) return line;
-        const pad = 13;
-        return label.trim().padEnd(pad, ' ') + ': ' + value.trim();
+        return label.trim() + ': ' + value.trim();
       };
 
       const formattedLines = lines.map(line => formatKolom(line));
