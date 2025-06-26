@@ -15,7 +15,7 @@
       margin: 0;
       font-family: 'DM Sans', sans-serif;
       background: linear-gradient(to bottom right, #fcfcfc, #f0f4ff);
-      padding: 24px 16px 100px;
+      padding: 24px 16px 120px;
       overflow-x: hidden;
       text-align: center;
     }
@@ -48,18 +48,17 @@
     }
 
     button {
+      display: block;
+      width: calc(100% - 32px);
+      max-width: 320px;
+      margin: 8px auto;
       background: #5e60ce;
       color: white;
-      padding: 14px 28px;
+      padding: 14px;
       font-size: 16px;
       border: none;
       border-radius: 8px;
       cursor: pointer;
-      position: fixed;
-      bottom: 16px;
-      left: 50%;
-      transform: translateX(-50%);
-      z-index: 1000;
       box-shadow: 0 4px 10px rgba(0,0,0,0.2);
     }
 
@@ -94,6 +93,7 @@
   <div id="result">📦 Arahkan kamera ke QR Code peserta</div>
 
   <button onclick="shareTiket()">🔗 Bagikan Tiket</button>
+  <button onclick="downloadTiket()">⬇️ Unduh Tiket</button>
 
   <script>
     let scanner;
@@ -111,13 +111,12 @@
       document.getElementById("result").innerText = ticket;
       lastTiket = ticket;
 
-      if (typeof AndroidBridge !== "undefined") {
-        if (AndroidBridge.print) {
-          AndroidBridge.print(ticket); // opsional: tetap gunakan jika tersedia
-        }
+      // Jika AndroidBridge tersedia, panggil fungsi print (opsional)
+      if (typeof AndroidBridge !== "undefined" && AndroidBridge.print) {
+        AndroidBridge.print(ticket);
       }
 
-      // Stop scanner setelah scan sukses
+      // Hentikan scanner setelah berhasil scan
       if (scanner) {
         scanner.stop().then(() => scanner.clear()).catch(() => {});
       }
@@ -139,6 +138,18 @@
       } else {
         alert("Fitur berbagi tidak tersedia di perangkat ini.");
       }
+    }
+
+    function downloadTiket() {
+      if (!lastTiket) {
+        alert("Belum ada tiket untuk diunduh.");
+        return;
+      }
+      const blob = new Blob([lastTiket], { type: "text/plain" });
+      const link = document.createElement("a");
+      link.href = URL.createObjectURL(blob);
+      link.download = "tiket-krk.txt";
+      link.click();
     }
 
     window.addEventListener("load", () => {
