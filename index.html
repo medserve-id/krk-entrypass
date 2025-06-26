@@ -2,38 +2,17 @@
 <html lang="id">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport"
-        content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-  <title>ENTRY PASS KRK</title>
-  <script src="https://unpkg.com/html5-qrcode" defer></script>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+  <title>QR Multi-Purpose Scanner</title>
+  <script src="https://unpkg.com/html5-qrcode"></script>
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-  <div class="scanner">
-    <h1>Scan Tiket Peserta</h1>
-    <button onclick="startScanner()" disabled id="scanBtn">📷 Scan QRCode</button>
-    <div id="reader">Tunggu pemindaian...</div>
-  </div>
+  <h1>Multi QR Scanner</h1>
+  <div id="reader">📷 Menunggu kamera aktif...</div>
+  <div id="result" class="box">📦 Belum ada hasil</div>
+  <button onclick="window.print()">🖨️ Cetak</button>
 
-  <div id="ticket" class="ticket hidden">
-    <div class="title">*ENTRY PASS*</div>
-    <div class="section">Kebangunan Rohani Katolik<br>PDPKK HKY Tasikmalaya<br>Bersama Rm.Eko Wahyu, OSC.</div>
-
-    <div class="line"></div>
-
-    <div class="field">No Registrasi : <span id="reg">-</span></div>
-    <div class="field">Nama : <span id="name">-</span></div>
-    <div class="field">Paroki/Lingk: <span id="paroki">-</span></div>
-    <div class="field">Kota : <span id="kota">-</span></div>
-    <div class="field">No WA : <span id="wa">-</span></div>
-
-    <div class="line dashed"></div>
-
-    <div class="section small">Mohon jaga ketertiban<br>Dilarang makan/minum di Gereja<br>Tiket ditukar bingkisan</div>
-
-    <div class="footer">Panitia KRK PDPKK @2025</div>
-  </div>
-
-  <script src="script.js?v=3"></script>
+  <script src="script.js?v=multi"></script>
 </body>
 </html>
