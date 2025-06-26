@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
   <title>Scan Tiket KRK</title>
-  <script src="https://unpkg.com/html5-qrcode"></script>
+  <script src="https://unpkg.com/html5-qrcode@2.3.7/minified/html5-qrcode.min.js"></script>
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;700&display=swap" rel="stylesheet">
   <style>
     body {
@@ -116,12 +116,17 @@
         lines.splice(lines.indexOf(regLine), 1);
       }
 
-      const regDisplay = 
-`====================
-    ${regNumber.toUpperCase()}
-====================`;
+      // Buat agar nomor registrasi di tengah (max 31 karakter)
+      const maxLineLength = 31;
+      const regPadded = regNumber.toUpperCase();
+      const spacesBefore = Math.floor((maxLineLength - regPadded.length) / 2);
+      const centeredReg = ' '.repeat(spacesBefore) + regPadded;
 
-      return `${regDisplay}\n\n${lines.join('\n')}`;
+      const regDisplay = 
+`\n\n\n\n\n${centeredReg}
+===============================`;
+
+      return `${regDisplay}\n\n${lines.join('\n')}\n\n\n\n\n`;
     }
 
     function onScanSuccess(decodedText) {
