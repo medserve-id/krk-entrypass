@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
   <title>Scan Tiket KRK</title>
-  <script src="https://unpkg.com/html5-qrcode@2.3.7/minified/html5-qrcode.min.js"></script>
+  <script src="https://unpkg.com/html5-qrcode" type="text/javascript"></script>
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;700&display=swap" rel="stylesheet">
   <style>
     body {
@@ -121,7 +121,7 @@
       const spacesBefore = Math.floor((maxLineLength - regPadded.length) / 2);
       const centeredReg = ' '.repeat(spacesBefore) + regPadded;
 
-      const filler = '\n     \n     \n     \n     \n     \n'; // 5 baris kosong
+      const filler = '\n     \n     \n     \n     \n     \n'; // 5 baris isi spasi
 
       const regDisplay =
         `${filler}` +
